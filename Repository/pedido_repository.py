@@ -1,27 +1,27 @@
-from Entities.pedidos import Pedido
+from Entities.pedidos import Order
 from database import db
 
 
-class PedidoRepository:
-    def salvar_pedido(self, NewOrder):
+class OrderRepository:
+    def save_order(self, NewOrder):
         try:
             db.session.add(NewOrder)
             db.session.commit()
             return NewOrder
         except Exception as e:
             db.session.rollback()
-            print(f'erro ao salvar pedido {e}')
+            print(f'Error: {e}')
             raise e  #o erro vai pro service/controler se virarem
 
 
     def find_order_by_id(self, id):
         try:
-            return Pedido.query.get(id)
+            return Order.query.get(id)
         except Exception as e:
             raise e
 
     def find_all_orders(self):
         try:
-            return Pedido.query.all()
+            return Order.query.all()
         except Exception as e:
             raise e

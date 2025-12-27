@@ -1,5 +1,4 @@
 from datetime import datetime
-from flask_sqlalchemy import SQLAlchemy
 from database import db
 import enum
 
@@ -9,7 +8,7 @@ class OrderStatus(enum.Enum):
     PRONTO = "PRONTO"
     ENTREGUE = "ENTREGUE"
 
-class Pedido(db.Model):
+class Order(db.Model):
     __tablename__ = 'pedidos'
 
     id=db.Column(db.String(50), primary_key=True)
@@ -25,5 +24,5 @@ class Pedido(db.Model):
             'cliente': self.cliente,
             'item': self.item,
             'status': self.status,
-            'created_at': self.created_at
+            'created_at': self.created_at.isoformat()
         }

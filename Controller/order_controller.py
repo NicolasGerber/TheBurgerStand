@@ -11,13 +11,13 @@ def CreateOrder():
     order_obj = create_order(OrderInfo)
     response = {"id": order_obj.id,
             "status": order_obj.status,
-            "mensagem": "Pedido colocado na fila"
+            "Message": "Pedido colocado na fila"
             }
     return response, 200
 
 
 @order_bp.route('/order/<string:id>', methods=['GET'])
-def get_pedido(id):
+def get_order(id):
     return get_order(id), 200
 
 @order_bp.route('/order', methods=['GET'])
