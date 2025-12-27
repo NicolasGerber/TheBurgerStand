@@ -1,15 +1,22 @@
 from uuid import uuid4
-from Entities.pedidos import Pedido
-from Repository.pedido_repository import salvar_pedido
+from Entities.pedidos import Pedido, OrderStatus
+from Repository.pedido_repository import PedidoRepository
 
-def create_order(OrderInfo):
+repo = PedidoRepository()
 
-    novo_id = str(uuid4())
+def create_order(order_info):
     NewOrder = Pedido(
-            id=novo_id,
-            cliente=OrderInfo['cliente'],
-            item=OrderInfo['item'],
-            status="Pendente"
+            id=str(uuid4()),
+            cliente=order_info['cliente'],
+            item=order_info['item'],
+            status=OrderStatus.RECEBIDO
         )
+    pedido_salvo = repo.salvar_pedido(NewOrder)
+    return pedido_salvo
 
-    return salvar_pedido(NewOrder)
+def get_order(id):
+    return repo.find_order_by_id(id).to_dict()
+
+def get_all_orders():
+    orders_list = repo.find_all_orders()
+    return [order.to_dict() for order in orders_list]

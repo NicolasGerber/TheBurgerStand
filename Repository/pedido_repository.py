@@ -1,13 +1,27 @@
-from flask import jsonify
-from flask_sqlalchemy import SQLAlchemy
-db = SQLAlchemy()
+from Entities.pedidos import Pedido
+from database import db
 
 
-def salvar_pedido(NewOrder):
-    try:
-        db.session.add(NewOrder)
-        db.session.commit()
-        return jsonify(NewOrder.to_dict(),), 201
-    except:
-        db.session.rollback()
-        return jsonify({'error': 'Something went wrong'}), 500
+class PedidoRepository:
+    def salvar_pedido(self, NewOrder):
+        try:
+            db.session.add(NewOrder)
+            db.session.commit()
+            return NewOrder
+        except Exception as e:
+            db.session.rollback()
+            print(f'erro ao salvar pedido {e}')
+            raise e  #o erro vai pro service/controler se virarem
+
+
+    def find_order_by_id(self, id):
+        try:
+            return Pedido.query.get(id)
+        except Exception as e:
+            raise e
+
+    def find_all_orders(self):
+        try:
+            return Pedido.query.all()
+        except Exception as e:
+            raise e
