@@ -1,6 +1,7 @@
 from flask import Flask
 from database import db
 from Controller.order_controller import order_bp
+from worker import start_worker
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://user:password@localhost:5432/burguer-db'
@@ -9,7 +10,14 @@ db.init_app(app)
 
 app.register_blueprint(order_bp, url_prefix='')
 
+@app.cli.command("start-consumer")
+def start_consumer():
+    with app.app_context():
+        start_worker()
+
 
 if __name__ == '__main__':
+
+
     app.run(debug=True)
 

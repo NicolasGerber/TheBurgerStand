@@ -25,3 +25,17 @@ class OrderRepository:
             return Order.query.all()
         except Exception as e:
             raise e
+
+    def update_order(self, id, new_status_string):
+        try:
+            order = Order.query.get(id)
+
+            if order:
+                order.status = new_status_string
+                db.session.commit()
+
+                return order
+            return None
+        except Exception as e:
+            db.session.rollback()
+            raise e

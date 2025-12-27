@@ -3,6 +3,7 @@ from Entities.pedidos import Order, OrderStatus
 from Repository.pedido_repository import OrderRepository
 from Configs.sqs_client import get_sqs_client, get_queue_url
 import json
+import time
 
 repo = OrderRepository()
 
@@ -44,3 +45,11 @@ def get_order(id):
 def get_all_orders():
     orders_list = repo.find_all_orders()
     return [order.to_dict() for order in orders_list]
+
+def update_order_status():
+    new_status = OrderStatus.PREPARACAO.value
+    print(f"Updating status to {new_status}")
+    time.sleep(30)  # This simulate the time to process
+    repo.update_order(id, new_status)
+    print(f"Successfully updated status to {new_status}")
+    return new_status
