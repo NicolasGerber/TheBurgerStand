@@ -16,9 +16,9 @@ def CreateOrder():
     return response, 200
 
 
-@order_bp.route('/order/<string:id>', methods=['GET'])
-def get_order(id):
-    return get_order(id), 200
+@order_bp.route('/order/<string:order_id>', methods=['GET'])
+def get_order_from_services(order_id):
+    return get_order(order_id), 200
 
 @order_bp.route('/order', methods=['GET'])
 def get_all():

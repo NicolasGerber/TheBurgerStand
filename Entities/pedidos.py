@@ -20,7 +20,7 @@ class Order(db.Model):
 
     def to_dict(self):
         return {
-            'id': self.id,
+            'order_id': self.id,
             'cliente': self.cliente,
             'item': self.item,
             'status': self.status,

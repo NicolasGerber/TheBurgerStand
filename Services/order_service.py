@@ -39,17 +39,47 @@ def create_order(order_info):
 
     return saved_order
 
-def get_order(id):
-    return repo.find_order_by_id(id).to_dict()
+def get_order(order_id):
+    return repo.find_order_by_id(order_id).to_dict()
 
 def get_all_orders():
     orders_list = repo.find_all_orders()
     return [order.to_dict() for order in orders_list]
 
-def update_order_status():
+def update_order_status(order_id):
     new_status = OrderStatus.PREPARACAO.value
     print(f"Updating status to {new_status}")
-    time.sleep(30)  # This simulate the time to process
-    repo.update_order(id, new_status)
+    time.sleep(4)  # This simulate the time to process
+    repo.update_order(order_id, new_status)
     print(f"Successfully updated status to {new_status}")
     return new_status
+
+def process_order(order_id):  #THis func encapsulate the "kitchen" logic
+    print("......[SERVICE].......")
+    print(f"PROCESSING ORDER {order_id}")
+    new_status = OrderStatus.PRONTO.value
+    time.sleep(4)
+    repo.update_order(order_id, new_status)
+    print(f"Order {order_id} READY!")
+    return new_status
+
+def get_locked_orders():
+    target_status = [
+        OrderStatus.RECEBIDO.value,
+        OrderStatus.PREPARACAO.value,
+        'Pendente',
+        'Pendende_Pagamento'
+    ]
+    print("......[SERVICE].......")
+    print("LOOKING FOR LOST ORDERS")
+    orders_list = repo.get_orders_locked_repo(status_list=target_status)
+
+    if not orders_list:
+        print(f"No orders found")
+        return
+    return orders_list.sort(key=lambda x: x.created_at)
+    # print(f"[SERVICE] RUSHING {len(orders_list)} ORDERS TO THE KITCHEN")
+    #
+    # for order in orders_list:
+    #     process_order(order.id)
+    # print(f"[SERVICE] ALL MISSING ORDERS PROCESSED")

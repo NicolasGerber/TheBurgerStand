@@ -14,9 +14,9 @@ class OrderRepository:
             raise e  #o erro vai pro service/controler se virarem
 
 
-    def find_order_by_id(self, id):
+    def find_order_by_id(self, order_id):
         try:
-            return Order.query.get(id)
+            return Order.query.get(order_id)
         except Exception as e:
             raise e
 
@@ -26,9 +26,9 @@ class OrderRepository:
         except Exception as e:
             raise e
 
-    def update_order(self, id, new_status_string):
+    def update_order(self, order_id, new_status_string):
         try:
-            order = Order.query.get(id)
+            order = Order.query.get(order_id)
 
             if order:
                 order.status = new_status_string
@@ -39,3 +39,6 @@ class OrderRepository:
         except Exception as e:
             db.session.rollback()
             raise e
+
+    def get_orders_locked_repo(self, status_list): #Find the status in the list
+        return Order.query.filter(Order.status.in_(status_list)).all()
